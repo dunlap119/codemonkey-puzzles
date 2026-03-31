@@ -76,13 +76,20 @@ export class Animator {
 
   async _animateStep(count) {
     const cs = getCellSize();
-    for (let i = 0; i < count; i++) {
+    const backward = count < 0;
+    const steps = Math.abs(count);
+    // For negative steps, move in the opposite direction
+    const moveDir = backward
+      ? (this.grid.monkey.direction + 2) % 4
+      : this.grid.monkey.direction;
+
+    for (let i = 0; i < steps; i++) {
       if (!this.running) return;
 
       const next = this.grid.getNextCell(
         this.grid.monkey.x,
         this.grid.monkey.y,
-        this.grid.monkey.direction
+        backward ? (this.grid.monkey.direction + 2) % 4 : this.grid.monkey.direction
       );
 
       if (!this.grid.isInBounds(next.x, next.y)) {

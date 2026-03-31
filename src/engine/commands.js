@@ -14,7 +14,7 @@ export function buildCommandContext(grid, puzzleDef) {
   function step(n) {
     if (n === undefined) n = 1;
     n = Math.round(n);
-    if (n < 1) return;
+    if (n === 0) return;
     actionQueue.push({ type: 'step', count: n });
     // Update simulated position
     const d = DIR_DELTA[simDir];
