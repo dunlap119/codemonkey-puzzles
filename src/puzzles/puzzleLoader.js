@@ -99,7 +99,15 @@ export function runCode(canvasEl) {
   }
 
   if (actionQueue.length === 0) {
-    showError('Your code didn\'t produce any actions. Try using step or turn!');
+    // Give a more specific hint if the puzzle uses loops
+    const codeNoComments = code.split('\n')
+      .filter(l => !l.trim().startsWith('#'))
+      .join('\n');
+    if (codeNoComments.includes('for') && !codeNoComments.includes('[')) {
+      showError('Check your loop syntax! Use: for i in [1..4] (with square brackets around the range).');
+    } else {
+      showError('Your code didn\'t produce any actions. Try using step or turn!');
+    }
     return;
   }
 
