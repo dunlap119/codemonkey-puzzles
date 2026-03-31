@@ -1,0 +1,13 @@
+{
+  "name": "codemonkey-puzzles",
+  "version": "1.0.0",
+  "description": "CodeMonkey-style CoffeeScript puzzle game",
+  "main": "index.html",
+  "scripts": {
+    "start": "parcel index.html",
+    "build": "parcel build index.html"
+  },
+  "devDependencies": {
+    "parcel-bundler": "^1.12.5"
+  }
+}

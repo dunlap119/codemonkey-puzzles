@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CoffeeScript Monkey Puzzles</title>
+
+  <!-- CodeMirror 5 -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/codemirror.min.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/theme/monokai.min.css" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/codemirror.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/coffeescript/coffeescript.min.js"></script>
+
+  <!-- CoffeeScript browser compiler -->
+  <script src="https://cdn.jsdelivr.net/npm/coffeescript@2.7.0/lib/coffeescript-browser-compiler-legacy/coffeescript.js"></script>
+
+  <link rel="stylesheet" href="./styles/main.css" />
+</head>
+<body>
+  <!-- Puzzle Menu Screen -->
+  <div id="menu-screen">
+    <h1>CoffeeScript Monkey Puzzles</h1>
+    <p class="subtitle">Write code to help the monkey collect bananas!</p>
+    <div id="puzzle-grid"></div>
+  </div>
+
+  <!-- Game Screen -->
+  <div id="game-screen" class="hidden">
+    <!-- Top Bar -->
+    <div id="top-bar">
+      <button id="btn-back" title="Back to menu">< Back</button>
+      <h2 id="puzzle-title">Puzzle 1</h2>
+      <span id="puzzle-concept" class="concept-badge"></span>
+    </div>
+
+    <!-- Main Split Pane -->
+    <div id="split-pane">
+      <!-- Left: Editor -->
+      <div id="editor-pane">
+        <div id="editor-header">
+          <span>CoffeeScript Editor</span>
+          <button id="btn-hint" class="small-btn">Show Hint</button>
+        </div>
+        <div id="hint-box" class="hidden"></div>
+        <textarea id="code-editor"></textarea>
+        <div id="button-bar">
+          <button id="btn-run" class="primary-btn">Run Code</button>
+          <button id="btn-reset" class="secondary-btn">Reset</button>
+          <button id="btn-stop" class="secondary-btn hidden">Stop</button>
+          <div id="speed-control">
+            <label for="speed-slider">Speed:</label>
+            <input type="range" id="speed-slider" min="1" max="5" value="3" />
+          </div>
+        </div>
+        <div id="error-display" class="hidden"></div>
+      </div>
+
+      <!-- Right: Canvas -->
+      <div id="canvas-pane">
+        <canvas id="game-canvas"></canvas>
+        <div id="star-display" class="hidden">
+          <span class="star" id="star1"></span>
+          <span class="star" id="star2"></span>
+          <span class="star" id="star3"></span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Success Modal -->
+  <div id="success-modal" class="modal hidden">
+    <div class="modal-content success">
+      <h2>Great Job!</h2>
+      <div id="modal-stars"></div>
+      <p id="modal-message"></p>
+      <button id="btn-next" class="primary-btn">Next Puzzle</button>
+    </div>
+  </div>
+
+  <!-- Failure Modal -->
+  <div id="failure-modal" class="modal hidden">
+    <div class="modal-content failure">
+      <h2 id="failure-title">Oops!</h2>
+      <p id="failure-message"></p>
+      <button id="btn-retry" class="primary-btn">Try Again</button>
+    </div>
+  </div>
+
+  <script src="./src/main.js" type="module"></script>
+</body>
+</html>
