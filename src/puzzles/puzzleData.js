@@ -49,8 +49,8 @@ const puzzles = [
       { type: 'banana', x: 2, y: 4 },
     ],
     autoGrab: true,
-    starterCode: '# Move right, then turn to go down!\n# Use: turn \"right\" or turn \"left\"\n',
-    hint: 'First step 2 to go right, then turn \"right\" to face downward, then step 2 more.',
+    starterCode: '# Move right, then turn to go down!\n# Use: turn right or turn left\n',
+    hint: 'First step 2 to go right, then turn right to face downward, then step 2 more.',
     starThresholds: [4, 3, 3],
   },
 
@@ -68,7 +68,7 @@ const puzzles = [
     ],
     autoGrab: false,
     starterCode: '# Collect BOTH bananas!\n# Use grab when you reach one\n',
-    hint: 'Go to the top banana first: step 1, turn \"left\", step 1, grab. Then turn around to get the bottom one.',
+    hint: 'Go to the top banana first: step 1, turn left, step 1, grab. Then turn around to get the bottom one.',
     starThresholds: [10, 8, 7],
   },
 
@@ -179,7 +179,7 @@ const puzzles = [
     ],
     autoGrab: false,
     starterCode: '# Each banana is 1 right and 1 down\n# Find the pattern!\n',
-    hint: 'The pattern repeats: step 1, turn \"right\", step 1, grab, turn \"left\". Put it in a for i in [1..3] loop!',
+    hint: 'The pattern repeats: step 1, turn right, step 1, grab, turn left. Put it in a for i in [1..3] loop!',
     starThresholds: [7, 6, 5],
   },
 

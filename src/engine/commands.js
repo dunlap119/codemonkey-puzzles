@@ -70,6 +70,11 @@ export function buildCommandContext(grid, puzzleDef) {
     .filter(e => e.type === 'turtle')
     .map(e => ({ x: e.x, y: e.y }));
 
+  // Define left/right as string variables so students can write
+  // turn left instead of turn "left" (matches CodeMonkey syntax)
+  bindings.left = 'left';
+  bindings.right = 'right';
+
   if (bananas.length === 1) {
     bindings.banana = bananas[0];
   }
