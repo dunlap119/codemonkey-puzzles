@@ -99,13 +99,8 @@ export function runCode(canvasEl) {
   }
 
   if (actionQueue.length === 0) {
-    showError('Your code didn\'t produce any actions. Try using step, turn, or grab!');
+    showError('Your code didn\'t produce any actions. Try using step or turn!');
     return;
-  }
-
-  // Handle autoGrab: for early puzzles, insert grab after final step if monkey lands on banana
-  if (currentPuzzle.autoGrab) {
-    actionQueue.push({ type: 'autoGrab' });
   }
 
   // Animate
@@ -127,22 +122,6 @@ export function runCode(canvasEl) {
   currentAnimator.setSpeed(parseInt(speedSlider.value));
 
   document.getElementById('btn-stop').classList.remove('hidden');
-
-  // Patch autoGrab: override the animator to auto-collect bananas on step
-  if (currentPuzzle.autoGrab) {
-    const origStep = currentAnimator._animateStep.bind(currentAnimator);
-    currentAnimator._animateStep = async function (count) {
-      await origStep(count);
-      // Auto grab if on banana
-      if (this.running) {
-        this.grid.removeBananaAt(this.grid.monkey.x, this.grid.monkey.y);
-      }
-    };
-    // Remove the autoGrab action from queue
-    const idx = actionQueue.findIndex(a => a.type === 'autoGrab');
-    if (idx !== -1) actionQueue.splice(idx, 1);
-  }
-
   currentAnimator.play(actionQueue);
 }
 

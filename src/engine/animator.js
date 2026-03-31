@@ -67,7 +67,7 @@ export class Animator {
       } else {
         const remaining = this.grid.getEntitiesByType('banana').length;
         this.onError(
-          `The monkey still needs to grab ${remaining} banana${remaining > 1 ? 's' : ''}! Remember to use grab when you reach a banana.`
+          `The monkey still needs to collect ${remaining} banana${remaining > 1 ? 's' : ''}! Make sure it walks to every banana.`
         );
         this.onComplete(false);
       }
@@ -112,8 +112,9 @@ export class Animator {
       this.animState.pixelX = endX;
       this.animState.pixelY = endY;
 
-      // Auto-collect in early puzzles (puzzles 1-3 don't require grab)
-      // This is handled by the puzzle definition's autoGrab flag
+      // Auto-collect banana when stepping on it
+      this.grid.removeBananaAt(next.x, next.y);
+      draw(this.grid, this.animState);
     }
   }
 
