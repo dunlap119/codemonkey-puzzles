@@ -4,7 +4,7 @@ export function initEditor(textareaEl) {
   cmInstance = CodeMirror.fromTextArea(textareaEl, {
     mode: 'coffeescript',
     theme: 'monokai',
-    lineNumbers: true,
+    lineNumbers: false,
     indentUnit: 2,
     tabSize: 2,
     indentWithTabs: false,
