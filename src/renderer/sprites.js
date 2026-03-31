@@ -1,130 +1,44 @@
-// 16x16 pixel art sprites defined as color-index strings
-// _ = transparent, each letter maps to PALETTE
+// Sprites: monkey and banana use PNG images; others use 16x16 pixel art
 
 const PALETTE = {
   _: null,
-  // Monkey
-  b: '#8B4513', // brown body
-  t: '#D2B48C', // tan face/belly
-  k: '#000000', // black (eyes, outline)
-  w: '#FFFFFF', // white (eye whites)
-  // Banana
-  y: '#FFD700', // yellow
-  Y: '#FFA500', // dark yellow/orange
   // Bush
-  g: '#228B22', // green
-  G: '#32CD32', // light green
-  d: '#006400', // dark green
+  g: '#228B22', G: '#32CD32', d: '#006400',
   // Turtle
-  T: '#2E8B57', // turtle shell green
-  O: '#FF8C00', // turtle body orange
+  T: '#2E8B57', O: '#FF8C00', k: '#000000',
   // Ground
-  e: '#C4A265', // earth/sand
-  E: '#B8956A', // earth variant
-  // General
-  r: '#CC3333', // red
-  p: '#FFB6C1', // pink
+  e: '#C4A265', E: '#B8956A',
+  // Sparkle
+  y: '#FFD700', w: '#FFFFFF',
 };
 
-// Direction: 0=right, 1=down, 2=left, 3=up
+// ---- PNG image sprites ----
 
-const MONKEY = [
-  // Right-facing
-  [
-    '____kkkkk_______',
-    '___kbbbbkk______',
-    '___kbbbbbk______',
-    '___kbttbbbk_____',
-    '___kttwtwbk_____',
-    '___kttttbk______',
-    '____kttkk_______',
-    '____kbbk________',
-    '___kbbbbk_______',
-    '___kbkbbk_______',
-    '___kbkkbk_______',
-    '____kkbk________',
-    '____kbbk________',
-    '____kkkkk_______',
-    '____kb_kbk______',
-    '____kk_kkk______',
-  ],
-  // Down-facing
-  [
-    '____kkkkk_______',
-    '___kbbbbk_______',
-    '___kbbbbk_______',
-    '___kbtbtk_______',
-    '___kwtwtkk______',
-    '___kttttk_______',
-    '____kttk________',
-    '____kbbk________',
-    '___kbbbbk_______',
-    '___kbbbbk_______',
-    '___kkbbkk_______',
-    '____kbbk________',
-    '____kbbk________',
-    '___kkkkk________',
-    '___kb__bk_______',
-    '___kk__kk_______',
-  ],
-  // Left-facing
-  [
-    '_______kkkkk____',
-    '______kkbbbbk___',
-    '______kbbbbbk___',
-    '_____kbbbtbbk___',
-    '_____kbwtwttk___',
-    '______kbtttttk__',
-    '_______kkttk____',
-    '________kbbk____',
-    '_______kbbbbk___',
-    '_______kbbkbk___',
-    '_______kbkkbk___',
-    '________kbkk____',
-    '________kbbk____',
-    '_______kkkkk____',
-    '______kbk_bk___',
-    '______kkk_kk___',
-  ],
-  // Up-facing
-  [
-    '____kkkkk_______',
-    '___kbbbbk_______',
-    '___kbbbbk_______',
-    '___kbbbbk_______',
-    '___kbbbbk_______',
-    '___kbbbbk_______',
-    '____kbbk________',
-    '____kbbk________',
-    '___kbbbbk_______',
-    '___kbbbbk_______',
-    '___kkbbkk_______',
-    '____kbbk________',
-    '____kbbk________',
-    '___kkkkk________',
-    '___kb__bk_______',
-    '___kk__kk_______',
-  ],
-];
+const imageCache = new Map();
+const imageLoadPromises = [];
 
-const BANANA = [
-  '________________',
-  '________kk______',
-  '_______kyk______',
-  '______kyyk______',
-  '_____kyyyk______',
-  '____kyyyyk______',
-  '____kyyyyk______',
-  '____kyyyyk______',
-  '____kyyyYk______',
-  '_____kyYYk______',
-  '_____kYYk_______',
-  '______kk________',
-  '________________',
-  '________________',
-  '________________',
-  '________________',
-];
+function loadImage(name, src) {
+  const img = new Image();
+  const promise = new Promise((resolve) => {
+    img.onload = () => {
+      imageCache.set(name, img);
+      resolve();
+    };
+    img.onerror = () => resolve(); // graceful fallback
+  });
+  img.src = src;
+  imageLoadPromises.push(promise);
+}
+
+// Preload PNG images
+loadImage('monkey_png', './assets/monkey.png');
+loadImage('banana_png', './assets/banana.png');
+
+export function waitForImages() {
+  return Promise.all(imageLoadPromises);
+}
+
+// ---- Pixel art sprites (bush, turtle, ground, sparkle) ----
 
 const BUSH = [
   '________________',
@@ -262,7 +176,8 @@ const SPARKLE = [
   '________________',
 ];
 
-// Sprite cache: keyed by "name_size"
+// ---- Rendering ----
+
 const cache = new Map();
 
 function renderSpriteData(spriteRows, cellSize) {
@@ -286,25 +201,73 @@ function renderSpriteData(spriteRows, cellSize) {
   return canvas;
 }
 
+function renderImageToCanvas(img, cellSize, flipX) {
+  const canvas = document.createElement('canvas');
+  canvas.width = cellSize;
+  canvas.height = cellSize;
+  const ctx = canvas.getContext('2d');
+
+  // Add small padding so sprites don't touch cell edges
+  const pad = cellSize * 0.05;
+  const drawSize = cellSize - pad * 2;
+
+  if (flipX) {
+    ctx.translate(cellSize, 0);
+    ctx.scale(-1, 1);
+  }
+  ctx.drawImage(img, pad, pad, drawSize, drawSize);
+
+  return canvas;
+}
+
 export function getSprite(name, direction, cellSize) {
   const dir = direction || 0;
   const key = `${name}_${dir}_${cellSize}`;
   if (cache.has(key)) return cache.get(key);
 
-  let data;
-  switch (name) {
-    case 'monkey':  data = MONKEY[dir]; break;
-    case 'banana':  data = BANANA; break;
-    case 'bush':    data = BUSH; break;
-    case 'turtle':  data = TURTLE[dir]; break;
-    case 'ground':  data = GROUND; break;
-    case 'sparkle': data = SPARKLE; break;
-    default: return null;
+  let rendered;
+
+  if (name === 'monkey') {
+    const img = imageCache.get('monkey_png');
+    if (img) {
+      // The monkey PNG faces right. Flip for left direction.
+      const flipX = (dir === 2);
+      rendered = renderImageToCanvas(img, cellSize, flipX);
+    } else {
+      // Fallback: simple colored square
+      rendered = fallbackSquare(cellSize, '#8B4513');
+    }
+  } else if (name === 'banana') {
+    const img = imageCache.get('banana_png');
+    if (img) {
+      rendered = renderImageToCanvas(img, cellSize, false);
+    } else {
+      rendered = fallbackSquare(cellSize, '#FFD700');
+    }
+  } else {
+    let data;
+    switch (name) {
+      case 'bush':    data = BUSH; break;
+      case 'turtle':  data = TURTLE[dir]; break;
+      case 'ground':  data = GROUND; break;
+      case 'sparkle': data = SPARKLE; break;
+      default: return null;
+    }
+    rendered = renderSpriteData(data, cellSize);
   }
 
-  const rendered = renderSpriteData(data, cellSize);
   cache.set(key, rendered);
   return rendered;
+}
+
+function fallbackSquare(cellSize, color) {
+  const canvas = document.createElement('canvas');
+  canvas.width = cellSize;
+  canvas.height = cellSize;
+  const ctx = canvas.getContext('2d');
+  ctx.fillStyle = color;
+  ctx.fillRect(4, 4, cellSize - 8, cellSize - 8);
+  return canvas;
 }
 
 export function clearSpriteCache() {

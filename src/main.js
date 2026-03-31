@@ -11,6 +11,7 @@ import {
 import { renderMenu, saveProgress } from './ui/menu.js';
 import { toggleHint, showStars, hideStars } from './ui/hud.js';
 import { showSuccess, hideSuccess, showFailure, hideFailure } from './ui/modal.js';
+import { waitForImages } from './renderer/sprites.js';
 
 // Screens
 const menuScreen = document.getElementById('menu-screen');
@@ -109,4 +110,5 @@ window.addEventListener('resize', () => {
 });
 
 // -- Start --
-showMenu();
+// Wait for PNG images to load, then show menu
+waitForImages().then(() => showMenu());
