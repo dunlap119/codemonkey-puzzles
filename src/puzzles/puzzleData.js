@@ -52,6 +52,7 @@ const puzzles = [
     starterCode: '# Move right, then turn to go down!\n# Use: turn right or turn left\n',
     hint: 'First step 2 to go right, then turn right to face downward, then step 2 more.',
     starThresholds: [4, 3, 3],
+    requiredCommands: ['turn'],
   },
 
   // ---- Puzzle 4: Two Bananas ----
@@ -87,6 +88,7 @@ const puzzles = [
     starterCode: '# The monkey is facing the wrong way!\n# turnTo banana makes it face the banana\nturnTo banana\n',
     hint: 'turnTo banana rotates the monkey to face the banana. Then just step the right number!',
     starThresholds: [3, 2, 2],
+    requiredCommands: ['turnTo'],
   },
 
   // ---- Puzzle 6: Step DistanceTo ----
@@ -104,6 +106,7 @@ const puzzles = [
     starterCode: '# Instead of counting, let the code do it!\n# step distanceTo banana\n',
     hint: 'distanceTo banana returns the number of steps to the banana. Use it inside step: step distanceTo banana',
     starThresholds: [2, 1, 1],
+    requiredCommands: ['distanceTo'],
   },
 
   // ---- Puzzle 7: Turn To + Distance To ----
@@ -122,6 +125,7 @@ const puzzles = [
     starterCode: '# Two bananas! Use bananas[0] and bananas[1]\nturnTo bananas[0]\nstep distanceTo bananas[0]\n# Now get the second one!\n',
     hint: 'After collecting the first banana, use turnTo bananas[1] and step distanceTo bananas[1] to reach the second one.',
     starThresholds: [8, 6, 6],
+    requiredCommands: ['turnTo', 'distanceTo'],
   },
 
   // ---- Puzzle 8: Watch Out for Bushes! ----
@@ -162,6 +166,7 @@ const puzzles = [
     starterCode: '# 4 bananas in a row! Use a loop:\n# for i in [1..4]\n#   step 1\n',
     hint: 'A for loop repeats code. for i in [1..4] runs the indented code 4 times. Put step 1 inside the loop!',
     starThresholds: [4, 3, 3],
+    requiredCommands: ['for'],
   },
 
   // ---- Puzzle 10: Staircase ----
@@ -181,6 +186,7 @@ const puzzles = [
     starterCode: '# Each banana is 1 right and 1 down\n# Find the pattern!\n',
     hint: 'The pattern repeats: step 1, turn right, step 1, turn left. Put it in a for i in [1..3] loop!',
     starThresholds: [7, 6, 5],
+    requiredCommands: ['for'],
   },
 
   // ---- Puzzle 11: Loop with turnTo ----
@@ -201,6 +207,7 @@ const puzzles = [
     starterCode: '# Loop through all bananas!\n# for b in bananas\n#   turnTo b\n#   step distanceTo b\n',
     hint: 'Use for b in bananas to go through each banana. Inside the loop: turnTo b, step distanceTo b.',
     starThresholds: [5, 4, 4],
+    requiredCommands: ['for', 'turnTo', 'distanceTo'],
   },
 
   // ---- Puzzle 12: Maze Runner ----
@@ -247,6 +254,7 @@ const puzzles = [
     starterCode: '# Define a function to avoid repeating code!\n# goGet = () ->\n#   step 2\n',
     hint: 'Create a function: goGet = () -> then indent step 2 below it. Call it 3 times: goGet() or use a loop!',
     starThresholds: [6, 5, 4],
+    requiredCommands: ['->'],
   },
 ];
 

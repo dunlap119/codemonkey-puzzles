@@ -103,6 +103,19 @@ export function runCode(canvasEl) {
     return;
   }
 
+  // Check required commands
+  if (currentPuzzle.requiredCommands) {
+    const codeNoComments = code.split('\n')
+      .filter(l => !l.trim().startsWith('#'))
+      .join('\n');
+    for (const cmd of currentPuzzle.requiredCommands) {
+      if (!codeNoComments.includes(cmd)) {
+        showError(`This puzzle requires you to use ${cmd} in your solution. Try using it!`);
+        return;
+      }
+    }
+  }
+
   // Animate
   const speedSlider = document.getElementById('speed-slider');
   currentAnimator = new Animator(
