@@ -185,6 +185,18 @@ body {
   background: #0d1117;
 }
 
+#editor-pane .CodeMirror-gutters {
+  min-width: 40px;
+  background: #161b22;
+  border-right: 1px solid #30363d;
+}
+
+#editor-pane .CodeMirror-linenumber {
+  padding: 0 8px 0 4px;
+  min-width: 28px;
+  color: #555;
+}
+
 #button-bar {
   display: flex;
   align-items: center;
