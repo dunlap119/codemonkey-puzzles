@@ -78,7 +78,9 @@ export function buildCommandContext(grid, puzzleDef) {
     if (!target || typeof target.x !== 'number' || typeof target.y !== 'number') {
       throw new Error('near expects an object like banana or turtle');
     }
-    return Math.abs(target.x - simX) + Math.abs(target.y - simY) <= 1;
+    // Returns true when monkey is ON the target (distance 0)
+    // This makes "until near banana / step 1" walk all the way there
+    return Math.abs(target.x - simX) + Math.abs(target.y - simY) === 0;
   }
 
   function wait() {
@@ -91,21 +93,18 @@ export function buildCommandContext(grid, puzzleDef) {
   function createEntityProxy(entityDef) {
     const proxy = { x: entityDef.x, y: entityDef.y };
 
-    if (entityDef.frozen !== undefined) {
-      const key = `${entityDef.x},${entityDef.y}`;
-      proxy.frozen = () => {
-        if (frozenOverrides.has(key)) return frozenOverrides.get(key);
-        return entityDef.frozen;
-      };
-    }
-    if (entityDef.green !== undefined) {
-      proxy.green = () => entityDef.green;
-    }
-    if (entityDef.hasGlasses !== undefined) {
-      proxy.hasGlasses = () => entityDef.hasGlasses;
-    }
-    if (entityDef.hasBowTie !== undefined) {
-      proxy.hasBowTie = () => entityDef.hasBowTie;
+    // Always provide frozen() and green() on all entities (default false)
+    const key = `${entityDef.x},${entityDef.y}`;
+    proxy.frozen = () => {
+      if (frozenOverrides.has(key)) return frozenOverrides.get(key);
+      return entityDef.frozen || false;
+    };
+    proxy.green = () => entityDef.green || false;
+
+    // Optional methods based on entity properties
+    if (entityDef.hasGlasses !== undefined || entityDef.hasBowTie !== undefined) {
+      proxy.hasGlasses = () => entityDef.hasGlasses || false;
+      proxy.hasBowTie = () => entityDef.hasBowTie || false;
     }
     if (entityDef.sleeping !== undefined) {
       proxy.sleeping = () => simStateCounter < (entityDef.wakesAt || 0);
