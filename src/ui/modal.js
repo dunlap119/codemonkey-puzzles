@@ -3,6 +3,7 @@ export function showSuccess(stars, isLastPuzzle) {
   const starsEl = document.getElementById('modal-stars');
   const msgEl = document.getElementById('modal-message');
   const nextBtn = document.getElementById('btn-next');
+  const retryBtn = document.getElementById('btn-success-retry');
 
   let starHtml = '';
   for (let i = 0; i < 3; i++) {
@@ -13,8 +14,8 @@ export function showSuccess(stars, isLastPuzzle) {
   starsEl.innerHTML = starHtml;
 
   const messages = [
-    'Nice work! You solved it!',
-    'Great job! Your code is efficient!',
+    'Nice work! You solved it! Can you make your code shorter?',
+    'Great job! Your code is efficient! Can you get 3 stars?',
     'Perfect! Couldn\'t be shorter!',
   ];
   msgEl.textContent = messages[Math.min(stars, 3) - 1];
@@ -23,6 +24,15 @@ export function showSuccess(stars, isLastPuzzle) {
     nextBtn.textContent = 'Back to Menu';
   } else {
     nextBtn.textContent = 'Next Puzzle';
+  }
+
+  // Show retry button when less than 3 stars
+  if (retryBtn) {
+    if (stars < 3) {
+      retryBtn.classList.remove('hidden');
+    } else {
+      retryBtn.classList.add('hidden');
+    }
   }
 
   modal.classList.remove('hidden');

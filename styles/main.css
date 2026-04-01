@@ -400,6 +400,17 @@ body {
   min-width: 160px;
 }
 
+.modal-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.modal-buttons .secondary-btn {
+  min-width: 140px;
+}
+
 /* ---- Lesson Modal ---- */
 .modal-content.lesson {
   border: 3px solid #7ec8e3;

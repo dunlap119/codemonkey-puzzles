@@ -105,6 +105,12 @@ document.getElementById('btn-retry').addEventListener('click', () => {
   resetPuzzle(canvasEl);
 });
 
+document.getElementById('btn-success-retry').addEventListener('click', () => {
+  hideSuccess();
+  hideStars();
+  resetPuzzle(canvasEl);
+});
+
 // Handle window resize
 window.addEventListener('resize', () => {
   const puzzle = getCurrentPuzzle();
