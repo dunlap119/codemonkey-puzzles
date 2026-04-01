@@ -19,11 +19,33 @@ export class Grid {
     this.entities = puzzleDef.entities.map(e => ({ ...e, removed: false }));
     this._initialMonkey = { ...puzzleDef.monkeyStart };
     this._initialEntities = puzzleDef.entities.map(e => ({ ...e }));
+
+    // Actor positions (goat, cat, bear, tiger)
+    this.actors = {};
+    for (const e of this.entities) {
+      if (e.isActor) {
+        this.actors[e.type] = { x: e.x, y: e.y, direction: e.direction || 0 };
+      }
+    }
+
+    // State counter for sleeping/playing mechanics
+    this.stateCounter = 0;
+
+    // Carrying state for grab/drop
+    this.carrying = false;
   }
 
   reset() {
     this.monkey = { ...this._initialMonkey };
     this.entities = this._initialEntities.map(e => ({ ...e, removed: false }));
+    this.actors = {};
+    for (const e of this.entities) {
+      if (e.isActor) {
+        this.actors[e.type] = { x: e.x, y: e.y, direction: e.direction || 0 };
+      }
+    }
+    this.stateCounter = 0;
+    this.carrying = false;
   }
 
   isInBounds(x, y) {
@@ -48,7 +70,7 @@ export class Grid {
 
   allBananasCollected() {
     return this.entities
-      .filter(e => e.type === 'banana')
+      .filter(e => e.type === 'banana' && !e.green)
       .every(e => e.removed);
   }
 
@@ -62,6 +84,28 @@ export class Grid {
     );
     if (banana) {
       banana.removed = true;
+      return banana;
+    }
+    return null;
+  }
+
+  removeMatchAt(x, y) {
+    const match = this.entities.find(
+      e => e.type === 'match' && e.x === x && e.y === y && !e.removed
+    );
+    if (match) {
+      match.removed = true;
+      return true;
+    }
+    return false;
+  }
+
+  unfreezeAt(x, y) {
+    const entity = this.entities.find(
+      e => e.x === x && e.y === y && e.frozen && !e.removed
+    );
+    if (entity) {
+      entity.frozen = false;
       return true;
     }
     return false;
@@ -70,7 +114,6 @@ export class Grid {
   directionTo(fromX, fromY, toX, toY) {
     const dx = toX - fromX;
     const dy = toY - fromY;
-    // Snap to the cardinal direction with greatest magnitude
     if (Math.abs(dx) >= Math.abs(dy)) {
       return dx >= 0 ? DIR_RIGHT : DIR_LEFT;
     } else {

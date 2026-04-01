@@ -1,22 +1,30 @@
 // Commands API: functions injected into student code scope
-// Each function queues an action; distanceTo returns a value immediately
+// Each function queues an action; distanceTo/near return values immediately
 
 import { DIR_RIGHT, DIR_DOWN, DIR_LEFT, DIR_UP, DIR_DELTA } from './grid.js';
 
 export function buildCommandContext(grid, puzzleDef) {
   const actionQueue = [];
 
-  // Shadow state for simulated position tracking (needed for distanceTo)
+  // Shadow state for simulated position tracking (needed for distanceTo/near)
   let simX = grid.monkey.x;
   let simY = grid.monkey.y;
   let simDir = grid.monkey.direction;
+
+  // State counter for sleeping/playing queries
+  let simStateCounter = 0;
+
+  // Carrying state for grab/drop
+  let simCarrying = false;
+
+  // Track frozen state changes during interpretation
+  const frozenOverrides = new Map(); // "x,y" -> boolean
 
   function step(n) {
     if (n === undefined) n = 1;
     n = Math.round(n);
     if (n === 0) return;
     actionQueue.push({ type: 'step', count: n });
-    // Update simulated position
     const d = DIR_DELTA[simDir];
     simX += d.dx * n;
     simY += d.dy * n;
@@ -40,7 +48,6 @@ export function buildCommandContext(grid, puzzleDef) {
       throw new Error('turnTo expects an object like banana or turtle');
     }
     actionQueue.push({ type: 'turnTo', targetX: target.x, targetY: target.y });
-    // Update simulated direction
     const dx = target.x - simX;
     const dy = target.y - simY;
     if (Math.abs(dx) >= Math.abs(dy)) {
@@ -52,6 +59,12 @@ export function buildCommandContext(grid, puzzleDef) {
 
   function grab() {
     actionQueue.push({ type: 'grab' });
+    simCarrying = true;
+  }
+
+  function drop() {
+    actionQueue.push({ type: 'drop' });
+    simCarrying = false;
   }
 
   function distanceTo(target) {
@@ -61,33 +74,169 @@ export function buildCommandContext(grid, puzzleDef) {
     return Math.abs(target.x - simX) + Math.abs(target.y - simY);
   }
 
-  // Build entity bindings: banana, bananas[], turtle, etc.
-  const bindings = {};
-  const bananas = puzzleDef.entities
-    .filter(e => e.type === 'banana')
-    .map(e => ({ x: e.x, y: e.y }));
-  const turtles = puzzleDef.entities
-    .filter(e => e.type === 'turtle')
-    .map(e => ({ x: e.x, y: e.y }));
+  function near(target) {
+    if (!target || typeof target.x !== 'number' || typeof target.y !== 'number') {
+      throw new Error('near expects an object like banana or turtle');
+    }
+    return Math.abs(target.x - simX) + Math.abs(target.y - simY) <= 1;
+  }
 
-  // Define left/right as string variables so students can write
-  // turn left instead of turn "left" (matches CodeMonkey syntax)
+  function wait() {
+    actionQueue.push({ type: 'wait' });
+    simStateCounter++;
+  }
+
+  // --- Entity proxy creation ---
+
+  function createEntityProxy(entityDef) {
+    const proxy = { x: entityDef.x, y: entityDef.y };
+
+    if (entityDef.frozen !== undefined) {
+      const key = `${entityDef.x},${entityDef.y}`;
+      proxy.frozen = () => {
+        if (frozenOverrides.has(key)) return frozenOverrides.get(key);
+        return entityDef.frozen;
+      };
+    }
+    if (entityDef.green !== undefined) {
+      proxy.green = () => entityDef.green;
+    }
+    if (entityDef.hasGlasses !== undefined) {
+      proxy.hasGlasses = () => entityDef.hasGlasses;
+    }
+    if (entityDef.hasBowTie !== undefined) {
+      proxy.hasBowTie = () => entityDef.hasBowTie;
+    }
+    if (entityDef.sleeping !== undefined) {
+      proxy.sleeping = () => simStateCounter < (entityDef.wakesAt || 0);
+    }
+    if (entityDef.playing !== undefined) {
+      proxy.playing = () => simStateCounter < (entityDef.playsUntil || 0);
+    }
+
+    return proxy;
+  }
+
+  // --- Actor binding creation (goat, cat, bear, tiger) ---
+
+  function createActorBinding(entityDef, actorType) {
+    let actorSimX = entityDef.x;
+    let actorSimY = entityDef.y;
+    let actorSimDir = entityDef.direction || 0;
+
+    const actor = createEntityProxy(entityDef);
+
+    actor.step = (n) => {
+      if (n === undefined) n = 1;
+      n = Math.round(n);
+      if (n === 0) return;
+      actionQueue.push({ type: 'step', actor: actorType, count: n });
+      const d = DIR_DELTA[actorSimDir];
+      actorSimX += d.dx * n;
+      actorSimY += d.dy * n;
+    };
+
+    actor.turn = (direction) => {
+      const dir = String(direction).toLowerCase().trim();
+      if (dir === 'left') {
+        actionQueue.push({ type: 'turn', actor: actorType, delta: -1 });
+        actorSimDir = (actorSimDir + 3) % 4;
+      } else if (dir === 'right') {
+        actionQueue.push({ type: 'turn', actor: actorType, delta: 1 });
+        actorSimDir = (actorSimDir + 1) % 4;
+      } else {
+        throw new Error(`turn expects "left" or "right", got "${direction}"`);
+      }
+    };
+
+    actor.turnTo = (target) => {
+      if (!target || typeof target.x !== 'number') {
+        throw new Error('turnTo expects an object');
+      }
+      actionQueue.push({ type: 'turnTo', actor: actorType, targetX: target.x, targetY: target.y });
+      const dx = target.x - actorSimX;
+      const dy = target.y - actorSimY;
+      if (Math.abs(dx) >= Math.abs(dy)) {
+        actorSimDir = dx >= 0 ? DIR_RIGHT : DIR_LEFT;
+      } else {
+        actorSimDir = dy >= 0 ? DIR_DOWN : DIR_UP;
+      }
+    };
+
+    actor.goto = (target) => {
+      if (!target || typeof target.x !== 'number') {
+        throw new Error('goto expects an object');
+      }
+      // turnTo + step distanceTo combined
+      actor.turnTo(target);
+      const dist = Math.abs(target.x - actorSimX) + Math.abs(target.y - actorSimY);
+      if (dist > 0) {
+        actor.step(dist);
+      }
+    };
+
+    actor.hit = (target) => {
+      if (target && typeof target.x === 'number') {
+        // Auto-goto the target first if not adjacent
+        const dist = Math.abs(target.x - actorSimX) + Math.abs(target.y - actorSimY);
+        if (dist > 1) {
+          actor.goto(target);
+        }
+        actionQueue.push({ type: 'hit', actor: actorType, targetX: target.x, targetY: target.y });
+        // Mark as unfrozen in sim state
+        const key = `${target.x},${target.y}`;
+        frozenOverrides.set(key, false);
+      } else {
+        actionQueue.push({ type: 'hit', actor: actorType, targetX: actorSimX, targetY: actorSimY });
+      }
+    };
+
+    return actor;
+  }
+
+  // --- Build entity bindings ---
+  const bindings = {};
+
+  // Direction string bindings (so students can write turn left / turn right)
   bindings.left = 'left';
   bindings.right = 'right';
 
-  if (bananas.length === 1) {
-    bindings.banana = bananas[0];
+  // Pluralization helper
+  function pluralize(name) {
+    if (name === 'bush') return 'bushes';
+    return name + 's';
   }
-  bindings.bananas = bananas;
 
-  if (turtles.length === 1) {
-    bindings.turtle = turtles[0];
+  // Entity types to create bindings for
+  const entityTypes = new Set(puzzleDef.entities.map(e => e.type));
+
+  for (const type of entityTypes) {
+    const entitiesOfType = puzzleDef.entities.filter(e => e.type === type);
+
+    // Actor entities get actor bindings
+    if (entitiesOfType.some(e => e.isActor)) {
+      for (const e of entitiesOfType) {
+        if (e.isActor) {
+          const actorBinding = createActorBinding(e, type);
+          bindings[type] = actorBinding;
+        }
+      }
+      // Also create plural array for actors
+      const items = entitiesOfType.filter(e => e.isActor).map(e => createActorBinding(e, type));
+      bindings[pluralize(type)] = items;
+    } else {
+      // Non-actor entities get simple proxies
+      const items = entitiesOfType.map(e => createEntityProxy(e));
+      if (items.length === 1) {
+        bindings[type] = items[0];
+      }
+      bindings[pluralize(type)] = items;
+    }
   }
-  bindings.turtles = turtles;
 
   return {
     actionQueue,
-    functions: { step, turn, turnTo, grab, distanceTo },
+    functions: { step, turn, turnTo, grab, drop, distanceTo, near, wait },
     bindings,
   };
 }

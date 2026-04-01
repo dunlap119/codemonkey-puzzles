@@ -35,16 +35,18 @@ export function draw(grid, animState) {
       const groundSprite = getSprite('ground', 0, cellSize);
       ctx.drawImage(groundSprite, x * cellSize, y * cellSize);
 
-      // Subtle grid lines
       ctx.strokeStyle = 'rgba(0,0,0,0.15)';
       ctx.strokeRect(x * cellSize, y * cellSize, cellSize, cellSize);
     }
   }
 
-  // Draw entities (bushes, bananas, turtle)
+  // Draw entities (bushes, bananas, turtle, goat, cat, penguin, match, pile, bear, tiger)
   for (const entity of grid.entities) {
     if (entity.removed) continue;
-    const sprite = getSprite(entity.type, entity.direction || 0, cellSize);
+    // Skip actors that are being animated (drawn separately)
+    if (entity.isActor && animState && animState.actorStates[entity.type]) continue;
+
+    const sprite = getSprite(entity.type, entity.direction || 0, cellSize, entity);
     if (sprite) {
       ctx.drawImage(sprite, entity.x * cellSize, entity.y * cellSize);
     }
@@ -58,6 +60,25 @@ export function draw(grid, animState) {
         const sprite = getSprite('sparkle', 0, cellSize);
         ctx.drawImage(sprite, sp.x * cellSize, sp.y * cellSize);
         ctx.globalAlpha = 1;
+      }
+    }
+  }
+
+  // Draw actors at their animated positions
+  if (animState && animState.actorStates) {
+    for (const [type, actorAnim] of Object.entries(animState.actorStates)) {
+      const entity = grid.entities.find(e => e.type === type && e.isActor && !e.removed);
+      if (!entity) continue;
+
+      // Check if cat should show sleeping sprite
+      const entityData = { ...entity };
+      if (type === 'cat' && entity.sleeping !== undefined) {
+        entityData.sleeping = grid.stateCounter < (entity.wakesAt || 0);
+      }
+
+      const sprite = getSprite(type, actorAnim.direction, cellSize, entityData);
+      if (sprite) {
+        ctx.drawImage(sprite, actorAnim.pixelX, actorAnim.pixelY);
       }
     }
   }

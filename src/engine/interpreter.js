@@ -36,11 +36,12 @@ export function interpret(coffeeSource, grid, puzzleDef) {
 
   // Step 4: Build sandboxed function
   const paramNames = [
-    'step', 'turn', 'turnTo', 'grab', 'distanceTo',
+    'step', 'turn', 'turnTo', 'grab', 'drop', 'distanceTo', 'near', 'wait',
     ...Object.keys(bindings),
   ];
   const paramValues = [
-    functions.step, functions.turn, functions.turnTo, functions.grab, functions.distanceTo,
+    functions.step, functions.turn, functions.turnTo, functions.grab,
+    functions.drop, functions.distanceTo, functions.near, functions.wait,
     ...Object.values(bindings),
   ];
 

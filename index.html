@@ -28,7 +28,7 @@
   <div id="game-screen" class="hidden">
     <!-- Top Bar -->
     <div id="top-bar">
-      <button id="btn-back" title="Back to menu">< Back</button>
+      <button id="btn-back" title="Back to menu">&lt; Back</button>
       <h2 id="puzzle-title">Puzzle 1</h2>
       <span id="puzzle-concept" class="concept-badge"></span>
     </div>
@@ -83,6 +83,25 @@
       <h2 id="failure-title">Oops!</h2>
       <p id="failure-message"></p>
       <button id="btn-retry" class="primary-btn">Try Again</button>
+    </div>
+  </div>
+
+  <!-- Lesson Intro Modal -->
+  <div id="lesson-modal" class="modal hidden">
+    <div class="modal-content lesson">
+      <h2 id="lesson-modal-title">Lesson</h2>
+      <div id="lesson-content"></div>
+      <button id="btn-lesson-ok" class="primary-btn">Got it!</button>
+    </div>
+  </div>
+
+  <!-- Assessment Modal -->
+  <div id="assessment-modal" class="modal hidden">
+    <div class="modal-content assessment">
+      <h2>Quick Quiz</h2>
+      <div id="assessment-questions"></div>
+      <div id="assessment-feedback" class="hidden"></div>
+      <button id="btn-assessment-submit" class="primary-btn">Submit</button>
     </div>
   </div>
 
