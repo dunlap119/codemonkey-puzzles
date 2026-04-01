@@ -1,4 +1,3 @@
-import puzzles from './puzzleData.js';
 import { Grid } from '../engine/grid.js';
 import { interpret, PuzzleError } from '../engine/interpreter.js';
 import { Animator } from '../engine/animator.js';
@@ -6,6 +5,7 @@ import { initCanvas, resizeCanvas, draw } from '../renderer/canvas.js';
 import { clearSpriteCache } from '../renderer/sprites.js';
 import { setCode, getCode, clearErrors, highlightError } from '../editor/editor.js';
 
+let puzzles = [];
 let currentPuzzle = null;
 let currentGrid = null;
 let currentAnimator = null;
@@ -13,6 +13,10 @@ let currentAnimator = null;
 // Callbacks set by main.js
 let onPuzzleComplete = null;
 let onPuzzleFail = null;
+
+export function initPuzzles(puzzleArray) {
+  puzzles = puzzleArray;
+}
 
 export function setCallbacks(onComplete, onFail) {
   onPuzzleComplete = onComplete;

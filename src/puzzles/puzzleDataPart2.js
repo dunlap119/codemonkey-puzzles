@@ -8,7 +8,7 @@ const part2 = [
   // =====================================================
 
   {
-    id: 14,
+    id: 1,
     part: 2,
     lesson: 17,
     lessonTitle: 'Function Farm',
@@ -30,7 +30,7 @@ const part2 = [
   },
 
   {
-    id: 15,
+    id: 2,
     part: 2,
     lesson: 17,
     lessonTitle: 'Function Farm',
@@ -53,7 +53,7 @@ const part2 = [
   },
 
   {
-    id: 16,
+    id: 3,
     part: 2,
     lesson: 17,
     lessonTitle: 'Function Farm',
@@ -84,7 +84,7 @@ const part2 = [
   // =====================================================
 
   {
-    id: 17,
+    id: 4,
     part: 2,
     lesson: 18,
     lessonTitle: 'Fun-ctions!',
@@ -105,7 +105,7 @@ const part2 = [
   },
 
   {
-    id: 18,
+    id: 5,
     part: 2,
     lesson: 18,
     lessonTitle: 'Fun-ctions!',
@@ -124,7 +124,7 @@ const part2 = [
   },
 
   {
-    id: 19,
+    id: 6,
     part: 2,
     lesson: 18,
     lessonTitle: 'Fun-ctions!',
@@ -155,7 +155,7 @@ const part2 = [
   // =====================================================
 
   {
-    id: 20,
+    id: 7,
     part: 2,
     lesson: 19,
     lessonTitle: 'Fake It \'Til You Make It',
@@ -176,7 +176,7 @@ const part2 = [
   },
 
   {
-    id: 21,
+    id: 8,
     part: 2,
     lesson: 19,
     lessonTitle: 'Fake It \'Til You Make It',
@@ -198,7 +198,7 @@ const part2 = [
   },
 
   {
-    id: 22,
+    id: 9,
     part: 2,
     lesson: 19,
     lessonTitle: 'Fake It \'Til You Make It',
@@ -228,7 +228,7 @@ const part2 = [
   // =====================================================
 
   {
-    id: 23,
+    id: 10,
     part: 2,
     lesson: 20,
     lessonTitle: 'It Ain\'t Over Until It\'s Over',
@@ -249,7 +249,7 @@ const part2 = [
   },
 
   {
-    id: 24,
+    id: 11,
     part: 2,
     lesson: 20,
     lessonTitle: 'It Ain\'t Over Until It\'s Over',
@@ -269,7 +269,7 @@ const part2 = [
   },
 
   {
-    id: 25,
+    id: 12,
     part: 2,
     lesson: 20,
     lessonTitle: 'It Ain\'t Over Until It\'s Over',
@@ -298,7 +298,7 @@ const part2 = [
   // =====================================================
 
   {
-    id: 26,
+    id: 13,
     part: 2,
     lesson: 21,
     lessonTitle: 'Cut to the Chase',
@@ -321,7 +321,7 @@ const part2 = [
   },
 
   {
-    id: 27,
+    id: 14,
     part: 2,
     lesson: 21,
     lessonTitle: 'Cut to the Chase',
@@ -344,7 +344,7 @@ const part2 = [
   },
 
   {
-    id: 28,
+    id: 15,
     part: 2,
     lesson: 21,
     lessonTitle: 'Cut to the Chase',
@@ -379,7 +379,7 @@ const part2 = [
   // =====================================================
 
   {
-    id: 29,
+    id: 16,
     part: 2,
     lesson: 22,
     lessonTitle: 'Wait for It...',
@@ -401,7 +401,7 @@ const part2 = [
   },
 
   {
-    id: 30,
+    id: 17,
     part: 2,
     lesson: 22,
     lessonTitle: 'Wait for It...',
@@ -426,7 +426,7 @@ const part2 = [
   },
 
   {
-    id: 31,
+    id: 18,
     part: 2,
     lesson: 22,
     lessonTitle: 'Wait for It...',
@@ -456,7 +456,7 @@ const part2 = [
   // =====================================================
 
   {
-    id: 32,
+    id: 19,
     part: 2,
     lesson: 23,
     lessonTitle: 'Act the Goat',
@@ -478,7 +478,7 @@ const part2 = [
   },
 
   {
-    id: 33,
+    id: 20,
     part: 2,
     lesson: 23,
     lessonTitle: 'Act the Goat',
@@ -500,7 +500,7 @@ const part2 = [
   },
 
   {
-    id: 34,
+    id: 21,
     part: 2,
     lesson: 23,
     lessonTitle: 'Act the Goat',
@@ -532,7 +532,7 @@ const part2 = [
   // =====================================================
 
   {
-    id: 35,
+    id: 22,
     part: 2,
     lesson: 24,
     lessonTitle: 'Green Banana Sorbet',
@@ -554,7 +554,7 @@ const part2 = [
   },
 
   {
-    id: 36,
+    id: 23,
     part: 2,
     lesson: 24,
     lessonTitle: 'Green Banana Sorbet',
@@ -576,7 +576,7 @@ const part2 = [
   },
 
   {
-    id: 37,
+    id: 24,
     part: 2,
     lesson: 24,
     lessonTitle: 'Green Banana Sorbet',
@@ -607,7 +607,7 @@ const part2 = [
   // =====================================================
 
   {
-    id: 38,
+    id: 25,
     part: 2,
     lesson: 25,
     lessonTitle: 'If All Else Fails',
@@ -631,7 +631,7 @@ const part2 = [
   },
 
   {
-    id: 39,
+    id: 26,
     part: 2,
     lesson: 25,
     lessonTitle: 'If All Else Fails',
@@ -655,7 +655,7 @@ const part2 = [
   },
 
   {
-    id: 40,
+    id: 27,
     part: 2,
     lesson: 25,
     lessonTitle: 'If All Else Fails',
@@ -690,7 +690,7 @@ const part2 = [
   // =====================================================
 
   {
-    id: 41,
+    id: 28,
     part: 2,
     lesson: 26,
     lessonTitle: 'And in the End',
@@ -715,7 +715,7 @@ const part2 = [
   },
 
   {
-    id: 42,
+    id: 29,
     part: 2,
     lesson: 26,
     lessonTitle: 'And in the End',
@@ -739,7 +739,7 @@ const part2 = [
   },
 
   {
-    id: 43,
+    id: 30,
     part: 2,
     lesson: 26,
     lessonTitle: 'And in the End',
@@ -771,7 +771,7 @@ const part2 = [
   // =====================================================
 
   {
-    id: 44,
+    id: 31,
     part: 2,
     lesson: 27,
     lessonTitle: 'Take it or Leave it!',
@@ -796,7 +796,7 @@ const part2 = [
   },
 
   {
-    id: 45,
+    id: 32,
     part: 2,
     lesson: 27,
     lessonTitle: 'Take it or Leave it!',
@@ -820,7 +820,7 @@ const part2 = [
   },
 
   {
-    id: 46,
+    id: 33,
     part: 2,
     lesson: 27,
     lessonTitle: 'Take it or Leave it!',
@@ -853,7 +853,7 @@ const part2 = [
   // =====================================================
 
   {
-    id: 47,
+    id: 34,
     part: 2,
     lesson: 28,
     lessonTitle: 'Mix and Match',
@@ -876,7 +876,7 @@ const part2 = [
   },
 
   {
-    id: 48,
+    id: 35,
     part: 2,
     lesson: 28,
     lessonTitle: 'Mix and Match',
@@ -899,7 +899,7 @@ const part2 = [
   },
 
   {
-    id: 49,
+    id: 36,
     part: 2,
     lesson: 28,
     lessonTitle: 'Mix and Match',
@@ -934,7 +934,7 @@ const part2 = [
   // =====================================================
 
   {
-    id: 50,
+    id: 37,
     part: 2,
     lesson: 29,
     lessonTitle: 'Fashion Alert!',
@@ -960,7 +960,7 @@ const part2 = [
   },
 
   {
-    id: 51,
+    id: 38,
     part: 2,
     lesson: 29,
     lessonTitle: 'Fashion Alert!',
@@ -986,7 +986,7 @@ const part2 = [
   },
 
   {
-    id: 52,
+    id: 39,
     part: 2,
     lesson: 29,
     lessonTitle: 'Fashion Alert!',
@@ -1019,7 +1019,7 @@ const part2 = [
   // =====================================================
 
   {
-    id: 53,
+    id: 40,
     part: 2,
     lesson: 30,
     lessonTitle: 'Loops are Fun',
@@ -1047,7 +1047,7 @@ const part2 = [
   },
 
   {
-    id: 54,
+    id: 41,
     part: 2,
     lesson: 30,
     lessonTitle: 'Loops are Fun',
@@ -1071,7 +1071,7 @@ const part2 = [
   },
 
   {
-    id: 55,
+    id: 42,
     part: 2,
     lesson: 30,
     lessonTitle: 'Loops are Fun',
@@ -1106,7 +1106,7 @@ const part2 = [
   // =====================================================
 
   {
-    id: 56,
+    id: 43,
     part: 2,
     lesson: 31,
     lessonTitle: 'What\'s the Conditional?',
@@ -1131,7 +1131,7 @@ const part2 = [
   },
 
   {
-    id: 57,
+    id: 44,
     part: 2,
     lesson: 31,
     lessonTitle: 'What\'s the Conditional?',
@@ -1155,7 +1155,7 @@ const part2 = [
   },
 
   {
-    id: 58,
+    id: 45,
     part: 2,
     lesson: 31,
     lessonTitle: 'What\'s the Conditional?',
@@ -1191,7 +1191,7 @@ const part2 = [
   // =====================================================
 
   {
-    id: 59,
+    id: 46,
     part: 2,
     lesson: 32,
     lessonTitle: 'Stars Party!',
@@ -1220,7 +1220,7 @@ const part2 = [
   },
 
   {
-    id: 60,
+    id: 47,
     part: 2,
     lesson: 32,
     lessonTitle: 'Stars Party!',
@@ -1244,7 +1244,7 @@ const part2 = [
   },
 
   {
-    id: 61,
+    id: 48,
     part: 2,
     lesson: 32,
     lessonTitle: 'Stars Party!',

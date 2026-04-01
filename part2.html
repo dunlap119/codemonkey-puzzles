@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>CoffeeScript Monkey Puzzles</title>
+  <title>CoffeeScript Monkey Puzzles - Part 2</title>
 
   <!-- CodeMirror 5 -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/codemirror.min.css" />
@@ -20,11 +20,11 @@
   <!-- Puzzle Menu Screen -->
   <div id="menu-screen">
     <h1>CoffeeScript Monkey Puzzles</h1>
-    <p class="subtitle">Write code to help the monkey collect bananas!</p>
-    <div id="puzzle-grid"></div>
+    <p class="subtitle">Part 2: Functions &amp; Conditions</p>
     <div class="part-nav">
-      <a href="./part2.html" class="part-nav-btn">Part 2: Functions &amp; Conditions &rarr;</a>
+      <a href="./index.html" class="part-nav-btn">&larr; Back to Part 1</a>
     </div>
+    <div id="puzzle-grid"></div>
   </div>
 
   <!-- Game Screen -->
@@ -89,6 +89,25 @@
     </div>
   </div>
 
-  <script src="./src/main.js" type="module"></script>
+  <!-- Lesson Intro Modal -->
+  <div id="lesson-modal" class="modal hidden">
+    <div class="modal-content lesson">
+      <h2 id="lesson-modal-title">Lesson</h2>
+      <div id="lesson-content"></div>
+      <button id="btn-lesson-ok" class="primary-btn">Got it!</button>
+    </div>
+  </div>
+
+  <!-- Assessment Modal -->
+  <div id="assessment-modal" class="modal hidden">
+    <div class="modal-content assessment">
+      <h2>Quick Quiz</h2>
+      <div id="assessment-questions"></div>
+      <div id="assessment-feedback" class="hidden"></div>
+      <button id="btn-assessment-submit" class="primary-btn">Submit</button>
+    </div>
+  </div>
+
+  <script src="./src/main-part2.js" type="module"></script>
 </body>
 </html>

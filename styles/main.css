@@ -142,6 +142,31 @@ body {
 .star-filled { color: #ffd700; }
 .star-empty { color: #444; }
 
+/* Part navigation link */
+.part-nav {
+  width: 100%;
+  max-width: 900px;
+  margin: 20px 0;
+  text-align: center;
+}
+
+.part-nav-btn {
+  display: inline-block;
+  background: #0f3460;
+  color: #7ec8e3;
+  padding: 12px 28px;
+  border-radius: 10px;
+  text-decoration: none;
+  font-size: 1.05rem;
+  font-weight: bold;
+  transition: background 0.15s, transform 0.15s;
+}
+
+.part-nav-btn:hover {
+  background: #1a4a8a;
+  transform: translateY(-2px);
+}
+
 /* ---- Game Screen ---- */
 #game-screen {
   display: flex;

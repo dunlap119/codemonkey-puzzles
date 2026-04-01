@@ -8,15 +8,18 @@ import {
   setCallbacks,
   getNextPuzzleId,
   getCurrentPuzzle,
+  getPuzzles,
 } from './puzzles/puzzleLoader.js';
-import { renderMenu, saveProgress } from './ui/menu.js';
+import { initMenu, renderMenu, saveProgress } from './ui/menu.js';
 import { toggleHint, showStars, hideStars } from './ui/hud.js';
 import { showSuccess, hideSuccess, showFailure, hideFailure } from './ui/modal.js';
+import { showLessonIntro, showAssessment } from './ui/lessonPanel.js';
 import { waitForImages } from './renderer/sprites.js';
-import puzzles from './puzzles/puzzleData.js';
+import puzzles from './puzzles/puzzleDataPart2.js';
 
-// Initialize Part 1 puzzles
+// Initialize Part 2 puzzles with separate progress storage
 initPuzzles(puzzles);
+initMenu({ storageKey: 'codemonkey_progress_part2', layout: 'lessons' });
 
 // Screens
 const menuScreen = document.getElementById('menu-screen');
@@ -45,9 +48,20 @@ function openPuzzle(puzzleId) {
   hideStars();
   hideSuccess();
   hideFailure();
-  loadPuzzle(puzzleId, canvasEl);
-  // Re-render CodeMirror after display change
-  setTimeout(() => focus(), 50);
+
+  // Check for lesson intro before loading puzzle
+  const allPuzzles = getPuzzles();
+  const puzzle = allPuzzles.find(p => p.id === puzzleId);
+
+  if (puzzle && puzzle.lessonContent) {
+    showLessonIntro(puzzle, () => {
+      loadPuzzle(puzzleId, canvasEl);
+      setTimeout(() => focus(), 50);
+    });
+  } else {
+    loadPuzzle(puzzleId, canvasEl);
+    setTimeout(() => focus(), 50);
+  }
 }
 
 // -- Callbacks --
@@ -58,11 +72,19 @@ setCallbacks(
     saveProgress(puzzle.id, stars);
     showStars(stars);
     const nextId = getNextPuzzleId();
-    showSuccess(stars, nextId === null);
+
+    // Check if this puzzle has assessments
+    if (puzzle.assessments && puzzle.assessments.length > 0) {
+      showAssessment(puzzle, () => {
+        showSuccess(stars, nextId === null);
+      });
+    } else {
+      showSuccess(stars, nextId === null);
+    }
   },
   // onFail
   (puzzle, errorMsg) => {
-    // Error already shown in HUD; modal is optional
+    // Error already shown in HUD
   }
 );
 
@@ -115,5 +137,4 @@ window.addEventListener('resize', () => {
 });
 
 // -- Start --
-// Wait for PNG images to load, then show menu
 waitForImages().then(() => showMenu());

@@ -1,6 +1,12 @@
 import { getPuzzles } from '../puzzles/puzzleLoader.js';
 
-const STORAGE_KEY = 'codemonkey_progress';
+let STORAGE_KEY = 'codemonkey_progress';
+let layoutMode = 'flat'; // 'flat' or 'lessons'
+
+export function initMenu(config) {
+  if (config.storageKey) STORAGE_KEY = config.storageKey;
+  if (config.layout) layoutMode = config.layout;
+}
 
 export function getProgress() {
   try {
@@ -30,31 +36,9 @@ export function renderMenu(containerEl, onSelectPuzzle) {
   const puzzles = getPuzzles();
   const progress = getProgress();
 
-  // Group puzzles by part
-  const part1 = puzzles.filter(p => !p.part || p.part === 1);
-  const part2 = puzzles.filter(p => p.part === 2);
-
-  // Part 1 Header
-  const p1Header = document.createElement('div');
-  p1Header.className = 'part-header';
-  p1Header.innerHTML = '<h2>Part 1: Coding Basics</h2>';
-  containerEl.appendChild(p1Header);
-
-  // Part 1 puzzles
-  const p1Grid = document.createElement('div');
-  p1Grid.className = 'puzzle-grid-section';
-  renderPuzzleCards(p1Grid, part1, progress, onSelectPuzzle);
-  containerEl.appendChild(p1Grid);
-
-  // Part 2 Header
-  if (part2.length > 0) {
-    const p2Header = document.createElement('div');
-    p2Header.className = 'part-header';
-    p2Header.innerHTML = '<h2>Part 2: Functions & Conditions</h2>';
-    containerEl.appendChild(p2Header);
-
-    // Group Part 2 by lesson
-    const lessonGroups = groupByLesson(part2);
+  if (layoutMode === 'lessons') {
+    // Group by lesson with headers
+    const lessonGroups = groupByLesson(puzzles);
     for (const group of lessonGroups) {
       const lessonSection = document.createElement('div');
       lessonSection.className = 'lesson-group';
@@ -71,6 +55,12 @@ export function renderMenu(containerEl, onSelectPuzzle) {
 
       containerEl.appendChild(lessonSection);
     }
+  } else {
+    // Flat grid
+    const grid = document.createElement('div');
+    grid.className = 'puzzle-grid-section';
+    renderPuzzleCards(grid, puzzles, progress, onSelectPuzzle);
+    containerEl.appendChild(grid);
   }
 }
 
